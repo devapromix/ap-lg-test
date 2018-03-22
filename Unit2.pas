@@ -18,10 +18,12 @@ type
     procedure AddWord(const S: string);
     procedure Clear;
     function Count: Integer;
+    function GetReady: Integer;
     function GetWord(const LangEnum: TLangEnum; const Index: Integer): string;
     function GetCount(const Index: Integer): Integer;
     procedure IncCount(const Index: Integer);
     procedure SetRandom;
+    procedure GenWord;
   end;
 
 var
@@ -33,11 +35,14 @@ var
   RandWord4Index: Integer = 0;
   RandWord5Index: Integer = 0;
   AnswerIndex: Integer = 0;
+  Ready: Integer = 0;
   Errors: Integer = 0;
+  WordsMaxCount: Integer = 1;
+  IsFinal: Boolean = False;
 
 implementation
 
-uses System.Math, System.SysUtils;
+uses System.Math, System.SysUtils, Unit4;
 
 { TWords }
 
@@ -50,6 +55,8 @@ end;
 procedure TWords.Clear;
 begin
   LastWordIndex := 0;
+  Ready := 0;
+  Errors := 0;
   FWords.Clear;
   FCount.Clear;
 end;
@@ -73,9 +80,37 @@ begin
   inherited;
 end;
 
+procedure TWords.GenWord;
+var
+  C: Integer;
+begin
+  C := 0;
+  repeat
+    CurrWordIndex := RandomRange(0, Count);
+    Inc(C);
+    if C > 255 then
+    begin
+      IsFinal := True;
+      Break;
+    end;
+  until (CurrWordIndex <> LastWordIndex) and
+    (GetCount(CurrWordIndex) <= WordsMaxCount);
+  LastWordIndex := CurrWordIndex;
+end;
+
 function TWords.GetCount(const Index: Integer): Integer;
 begin
   Result := FCount[Index].ToInteger;
+end;
+
+function TWords.GetReady: Integer;
+var
+  I: Integer;
+begin
+  Result := 0;
+  for I := 0 to Count - 1 do
+    if GetCount(I) > WordsMaxCount then
+      Inc(Result);
 end;
 
 function TWords.GetWord(const LangEnum: TLangEnum;
@@ -97,10 +132,13 @@ end;
 procedure TWords.SetRandom;
 begin
   // Случайное слово
-  repeat
-    CurrWordIndex := RandomRange(0, Count);
-  until CurrWordIndex <> LastWordIndex;
-  LastWordIndex := CurrWordIndex;
+  GenWord;
+  //
+  if IsFinal then
+  begin
+    Form4.Show;
+    Exit;
+  end;
   // Позиция правильного ответа
   AnswerIndex := RandomRange(1, 6);
   // Случайное слово #1
@@ -129,6 +167,7 @@ begin
   until (RandWord5Index <> CurrWordIndex) and (RandWord5Index <> RandWord1Index)
     and (RandWord5Index <> RandWord2Index) and
     (RandWord5Index <> RandWord3Index) and (RandWord5Index <> RandWord4Index);
+  //
 end;
 
 end.
