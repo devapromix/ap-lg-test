@@ -1,4 +1,4 @@
-﻿unit Unit2;
+﻿unit uWords;
 
 interface
 
@@ -27,6 +27,8 @@ type
   end;
 
 var
+  Words: TWords;
+  //
   LastWordIndex: Integer = 0;
   CurrWordIndex: Integer = 0;
   RandWord1Index: Integer = 0;
@@ -38,11 +40,12 @@ var
   Ready: Integer = 0;
   Errors: Integer = 0;
   WordsMaxCount: Integer = 1;
+  CurrentCategory: Integer = 0;
   IsFinal: Boolean = False;
 
 implementation
 
-uses System.Math, System.SysUtils, Unit4;
+uses System.Math, System.SysUtils, uFinal;
 
 { TWords }
 
@@ -136,7 +139,7 @@ begin
   //
   if IsFinal then
   begin
-    Form4.Show;
+    fFinal.Show;
     Exit;
   end;
   // Позиция правильного ответа
@@ -169,5 +172,21 @@ begin
     (RandWord5Index <> RandWord3Index) and (RandWord5Index <> RandWord4Index);
   //
 end;
+
+initialization
+
+Words := TWords.Create;
+// Словарь
+Words.AddWord('First|fɜːst|Первый');
+Words.AddWord('Second|ˈsekənd|Второй');
+Words.AddWord('Third|θɜːd|Третий');
+Words.AddWord('Man|mæn|Мужчина');
+Words.AddWord('Woman|ˈwʊmən|Женщина');
+Words.AddWord('Dog|dɒɡ|Собака');
+Words.AddWord('Cat|kæt|Кот');
+
+finalization
+
+FreeAndNil(Words);
 
 end.
