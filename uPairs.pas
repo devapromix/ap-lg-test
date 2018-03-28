@@ -3,9 +3,15 @@ unit uPairs;
 interface
 
 type
+  TCell = record
+    Index: Integer;
+    Flag: Boolean;
+  end;
+
+type
   TPairs = class(TObject)
   private
-    FField: array of array of Integer;
+    FCell: array of array of TCell;
     FWidth: Integer;
     FHeight: Integer;
   public
@@ -14,8 +20,8 @@ type
     function Width: Integer;
     function Height: Integer;
     procedure Clear;
-    procedure SetField(const X, Y, Index: Integer);
-    function GetField(const X, Y: Integer): Integer;
+    procedure SetCell(const X, Y: Integer; Cell: TCell);
+    function GetCell(const X, Y: Integer): TCell;
     procedure Gen;
   end;
 
@@ -31,14 +37,17 @@ var
 begin
   for Y := 0 to Height - 1 do
     for X := 0 to Width - 1 do
-      FField[X, Y] := 0;
+    begin
+      FCell[X, Y].Index := 0;
+      FCell[X, Y].Flag := False;
+    end;
 end;
 
 constructor TPairs.Create(const Width, Height: Integer);
 begin
   FWidth := Width;
   FHeight := Height;
-  SetLength(FField, Width, Height);
+  SetLength(FCell, Width, Height);
   Self.Clear;
 end;
 
@@ -61,9 +70,9 @@ begin
     begin
       X := RandomRange(0, Width);
       Y := RandomRange(0, Height);
-      if FField[X, Y] = 0 then
+      if FCell[X, Y].Index = 0 then
       begin
-        FField[X, Y] := C;
+        FCell[X, Y].Index := C;
         Inc(F);
         if F > 2 then
         begin
@@ -76,9 +85,9 @@ begin
   end;
 end;
 
-function TPairs.GetField(const X, Y: Integer): Integer;
+function TPairs.GetCell(const X, Y: Integer): TCell;
 begin
-  Result := FField[X, Y];
+  Result := FCell[X, Y];
 end;
 
 function TPairs.Height: Integer;
@@ -86,9 +95,9 @@ begin
   Result := FHeight;
 end;
 
-procedure TPairs.SetField(const X, Y, Index: Integer);
+procedure TPairs.SetCell(const X, Y: Integer; Cell: TCell);
 begin
-  FField[X, Y] := Index;
+  FCell[X, Y] := Cell;
 end;
 
 function TPairs.Width: Integer;
