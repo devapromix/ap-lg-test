@@ -15,7 +15,7 @@ type
     FWidth: Integer;
     FHeight: Integer;
   public
-    constructor Create(const Width, Height: Integer);
+    constructor Create(const AWidth, AHeight: Integer);
     destructor Destroy; override;
     function Width: Integer;
     function Height: Integer;
@@ -43,11 +43,11 @@ begin
     end;
 end;
 
-constructor TPairs.Create(const Width, Height: Integer);
+constructor TPairs.Create(const AWidth, AHeight: Integer);
 begin
-  FWidth := Width;
-  FHeight := Height;
-  SetLength(FCell, Width, Height);
+  FWidth := AWidth;
+  FHeight := AHeight;
+  SetLength(FCell, FWidth, FHeight);
   Self.Clear;
 end;
 
