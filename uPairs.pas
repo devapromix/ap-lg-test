@@ -15,7 +15,8 @@ type
     FWidth: Integer;
     FHeight: Integer;
   public
-    constructor Create(const AWidth, AHeight: Integer);
+    constructor Create; overload;
+    constructor Create(const AWidth, AHeight: Integer); overload;
     destructor Destroy; override;
     function Width: Integer;
     function Height: Integer;
@@ -24,6 +25,9 @@ type
     function GetCell(const X, Y: Integer): TCell;
     procedure Gen;
   end;
+
+var
+  Pairs: TPairs;
 
 implementation
 
@@ -49,6 +53,11 @@ begin
   FHeight := AHeight;
   SetLength(FCell, FWidth, FHeight);
   Self.Clear;
+end;
+
+constructor TPairs.Create;
+begin
+  Create(0, 0);
 end;
 
 destructor TPairs.Destroy;
@@ -104,5 +113,14 @@ function TPairs.Width: Integer;
 begin
   Result := FWidth;
 end;
+
+initialization
+
+Pairs := TPairs.Create;
+
+finalization
+
+Pairs.Free;
+Pairs := nil;
 
 end.
