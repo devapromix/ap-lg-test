@@ -23,7 +23,9 @@ type
     procedure Clear;
     procedure SetCell(const X, Y: Integer; Cell: TCell);
     function GetCell(const X, Y: Integer): TCell;
+    function Equals(const X1, Y1, X2, Y2: Integer): Boolean;
     procedure Gen;
+    function IsFinal: Boolean;
   end;
 
 var
@@ -66,6 +68,11 @@ begin
   inherited;
 end;
 
+function TPairs.Equals(const X1, Y1, X2, Y2: Integer): Boolean;
+begin
+  Result := FCell[X1, Y1].Index = FCell[X2, Y2].Index;
+end;
+
 procedure TPairs.Gen;
 var
   I, D, C, F, X, Y: Integer;
@@ -104,6 +111,20 @@ begin
   Result := FHeight;
 end;
 
+function TPairs.IsFinal: Boolean;
+var
+  X, Y: Integer;
+begin
+  Result := True;
+  for Y := 0 to Height - 1 do
+    for X := 0 to Width - 1 do
+      if not FCell[X, Y].Flag then
+      begin
+        Result := False;
+        Exit;
+      end;
+end;
+
 procedure TPairs.SetCell(const X, Y: Integer; Cell: TCell);
 begin
   FCell[X, Y] := Cell;
@@ -113,14 +134,5 @@ function TPairs.Width: Integer;
 begin
   Result := FWidth;
 end;
-
-initialization
-
-Pairs := TPairs.Create;
-
-finalization
-
-Pairs.Free;
-Pairs := nil;
 
 end.
