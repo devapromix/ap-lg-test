@@ -89,7 +89,7 @@ initialization
 YesOrNo := TYesOrNo.Create;
 with YesOrNo do
 begin
-  Add('||');
+  Add('Молоко яка желтого цвета.|Все верно.|И все-таки это правда.');
 //  Add('||');
 end;
 
