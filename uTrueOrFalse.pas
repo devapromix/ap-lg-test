@@ -10,9 +10,9 @@ type
 type
   TTrueOrFalse = class(TObject)
   private
-    FSL: TStringList;
     procedure Add(const S: string);
   public
+    FSL: TStringList;
     Index: Integer;
     Score: Integer;
     constructor Create;
@@ -102,13 +102,6 @@ end;
 initialization
 
 TrueOrFalse := TTrueOrFalse.Create;
-with TrueOrFalse do
-begin
-  Add('True|Молоко бегемота желтого цвета?|Смешиваясь с потом, молоко самки бегемота приобретает желтый цвет.');
-  Add('False|Синие киты дышат жабрами?|Все млекопитающие дышат легкими и у них жабры отсутствуют. Киты - млекопитающие, ведущие водный образ жизни.');
-  Add('False|"Сентябрь" переводится с латыни как "восьмой"?|Слово "Сентябрь" означает седьмой. В древности год начинался в марте. Поэтому сентябрь был седьмым месяцем.');
-  // Add('||');
-end;
 
 finalization
 
