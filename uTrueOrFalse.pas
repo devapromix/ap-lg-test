@@ -73,7 +73,7 @@ var
 begin
   S := Trim(FSL[Index]);
   R := S.Split(['|']);
-  Result := R[Ord(QEnum)];
+  Result := Trim(R[Ord(QEnum)]);
 end;
 
 function TTrueOrFalse.GetFalse: string;
