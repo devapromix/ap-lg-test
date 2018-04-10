@@ -66,22 +66,65 @@ begin
   inherited;
 end;
 
+type
+  TExplodeResult = array of string;
+
+function Explode(const Separator: Char; Source: string): TExplodeResult;
+var
+  I: Integer;
+  S: string;
+begin
+  S := Source;
+  SetLength(Result, 0);
+  I := 0;
+  while Pos(Separator, S) > 0 do
+  begin
+    SetLength(Result, Length(Result) + 1);
+    Result[I] := Copy(S, 1, Pos(Separator, S) - 1);
+    Inc(I);
+    S := Copy(S, Pos(Separator, S) + Length(Separator), Length(S));
+  end;
+  SetLength(Result, Length(Result) + 1);
+  Result[I] := Copy(S, 1, Length(S));
+end;
+
 function TTrueOrFalse.Get(const QEnum: TQEnum): string;
 var
-  R: TArray<string>;
+  // R: TArray<string>;
+  R: TExplodeResult;
   S: string;
 begin
   S := Trim(FSL[Index]);
-  R := S.Split(['|']);
+  if S = '' then
+  begin
+    Result := '';
+    Exit;
+  end;
+  // R := S.Split(['|']);
+  R := Explode('|', S);
   Result := Trim(R[Ord(QEnum)]);
 end;
 
 function TTrueOrFalse.GetFalse: string;
 const
-  S: array [0 .. 10] of string = ('Вы ошиблись.', 'И все-таки это правда.',
+  S: array [0 .. 19] of string = ('Вы ошиблись.', 'И все-таки это правда.',
     'Неправда.', 'Неправильно.', 'Вы подзабыли.', 'В этот раз не повезло.',
-    'Вы угадали!', 'Неверно!', 'Вы перепутали.', 'Ошибка!',
-    'Какая досадная ошибка!');
+    'Вы не угадали!', 'Неверно!', 'Вы перепутали.', 'Ошибка!',
+    'Какая досадная ошибка!', 'Нет, что вы!', 'Разумеется, нет.',
+    'Конечно, нет!', 'Нет.', 'На самом деле это неправда!',
+    'Увы, ваш ответ неверен.', 'Ой, ошибка.', 'Не угадали!',
+    'Увы, ответ неправильный.');
+begin
+  Result := S[RandomRange(0, Length(S))];
+end;
+
+function TTrueOrFalse.GetTrue: string;
+const
+  S: array [0 .. 19] of string = ('Верно!', 'Да!', 'Да, это так!', 'Все верно!', 'Это так!', 'Именно так!',
+    'Это правда!', 'Невероятно, но это так.', 'Правильно!', 'Конечно!',
+    'Действительно!', 'Абсолютно верно!', 'Это, и правда, так!',
+    'Это, действительно, так!', 'Вы ответили правильно.', 'Правда!',
+    'Вы абсолютно правы!', 'Вы совершенно правы!', 'Вы угадали!', 'Вы правы.');
 begin
   Result := S[RandomRange(0, Length(S))];
 end;
@@ -89,19 +132,13 @@ end;
 function TTrueOrFalse.GetImage: string;
 begin
   Result := Get(qeImage);
+  if Result = '' then
+    Result := 'default.png';
 end;
 
 function TTrueOrFalse.GetQuest: string;
 begin
   Result := Get(qeQuest);
-end;
-
-function TTrueOrFalse.GetTrue: string;
-const
-  S: array [0 .. 6] of string = ('Все верно!', 'Это так!', 'Именно так!',
-    'Это правда!', 'Невероятно, но это так.', 'Правильно!', 'Вы ответили правильно.');
-begin
-  Result := S[RandomRange(0, Length(S))];
 end;
 
 function TTrueOrFalse.IsFinal: Boolean;
