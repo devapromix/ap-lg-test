@@ -18,12 +18,14 @@ type
     constructor Create;
     destructor Destroy; override;
     function Get(const QEnum: TQEnum): string;
+    procedure LoadFromFile(FileName: string);
     function GetImage: string;
     function GetQuest: string;
     function GetTrue: string;
     function GetFalse: string;
     function Count: Integer;
     function IsFinal: Boolean;
+    procedure Random;
     procedure Clear;
     procedure Load;
     procedure Save;
@@ -47,6 +49,7 @@ procedure TTrueOrFalse.Clear;
 begin
   Index := 0;
   Score := 0;
+  Random;
 end;
 
 function TTrueOrFalse.Count: Integer;
@@ -57,7 +60,6 @@ end;
 constructor TTrueOrFalse.Create;
 begin
   FSL := TStringList.Create;
-  Clear;
 end;
 
 destructor TTrueOrFalse.Destroy;
@@ -153,7 +155,7 @@ var
   F: string;
 begin
   Clear;
-  F := GetHomePath + System.SysUtils.PathDelim + 'trueorfalse.sav';
+  F := GetHomePath + PathDelim + 'trueorfalse.sav';
   SL := TStringList.Create;
   try
     if FileExists(F) then
@@ -167,7 +169,28 @@ begin
   finally
     FreeAndNil(SL);
   end;
+end;
 
+procedure TTrueOrFalse.LoadFromFile(FileName: string);
+begin
+  FSL.LoadFromFile(FileName, TEncoding.UTF8);
+end;
+
+procedure TTrueOrFalse.Random;
+var
+  I, A, B: Integer;
+  S: string;
+begin
+  for I := 0 to FSL.Count div 2 do
+  begin
+    A := RandomRange(0, FSL.Count);
+    B := RandomRange(0, FSL.Count);
+    if A = B then
+      Continue;
+    S := FSL[A];
+    FSL[A] := FSL[B];
+    FSL[B] := S;
+  end;
 end;
 
 procedure TTrueOrFalse.Save;
@@ -175,7 +198,7 @@ var
   SL: TStringList;
   F: string;
 begin
-  F := GetHomePath + System.SysUtils.PathDelim + 'trueorfalse.sav';
+  F := GetHomePath + PathDelim + 'trueorfalse.sav';
   SL := TStringList.Create;
   try
     SL.Append(IntToStr(Index));
@@ -184,6 +207,8 @@ begin
   finally
     FreeAndNil(SL);
   end;
+  F := GetHomePath + PathDelim + 'trueorfalse.txt';
+  FSL.SaveToFile(F, TEncoding.UTF8);
 end;
 
 initialization
