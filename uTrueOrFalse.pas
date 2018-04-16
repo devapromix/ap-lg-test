@@ -49,7 +49,6 @@ procedure TTrueOrFalse.Clear;
 begin
   Index := 0;
   Score := 0;
-  Random;
 end;
 
 function TTrueOrFalse.Count: Integer;
