@@ -91,7 +91,6 @@ end;
 
 function TTrueOrFalse.Get(const QEnum: TQEnum): string;
 var
-  // R: TArray<string>;
   R: TExplodeResult;
   S: string;
 begin
@@ -101,7 +100,6 @@ begin
     Result := '';
     Exit;
   end;
-  // R := S.Split(['|']);
   R := Explode('|', S);
   Result := Trim(R[Ord(QEnum)]);
 end;
