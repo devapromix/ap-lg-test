@@ -23,6 +23,7 @@ type
     function GetQuest: string;
     function GetTrue: string;
     function GetFalse: string;
+    function GetText: string;
     function Count: Integer;
     function IsFinal: Boolean;
     procedure Random;
@@ -30,9 +31,6 @@ type
     procedure Load;
     procedure Save;
   end;
-
-var
-  TrueOrFalse: TTrueOrFalse;
 
 implementation
 
@@ -115,6 +113,14 @@ const
     'Увы, ответ неправильный.');
 begin
   Result := S[RandomRange(0, Length(S))];
+end;
+
+function TTrueOrFalse.GetText: string;
+begin
+  if Get(qeInfo) = '' then
+    Result := Get(qeQuest).Replace('?', '.')
+  else
+    Result := Get(qeInfo);
 end;
 
 function TTrueOrFalse.GetTrue: string;
@@ -207,13 +213,5 @@ begin
   F := GetHomePath + PathDelim + 'trueorfalse.txt';
   FSL.SaveToFile(F, TEncoding.UTF8);
 end;
-
-initialization
-
-TrueOrFalse := TTrueOrFalse.Create;
-
-finalization
-
-FreeAndNil(TrueOrFalse);
 
 end.
