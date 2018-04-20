@@ -139,7 +139,7 @@ function TTrueOrFalse.GetImage: string;
 begin
   Result := Get(qeImage);
   if Result = '' then
-    Result := 'default.png';
+    Result := 'question-mark.jpg';
 end;
 
 function TTrueOrFalse.GetQuest: string;
