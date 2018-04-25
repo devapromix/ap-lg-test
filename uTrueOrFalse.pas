@@ -1,8 +1,11 @@
-unit uTrueOrFalse;
+п»їunit uTrueOrFalse;
 
 interface
 
 uses Classes;
+
+const
+  CurrVersionFilePref = 'ckbvkfascl';
 
 type
   TQEnum = (qeAnswer, qeImage, qeQuest, qeInfo);
@@ -26,6 +29,9 @@ type
     function GetText: string;
     function Count: Integer;
     function IsFinal: Boolean;
+    function BaseFileName: string;
+    function TempFileName: string;
+    function SaveFileName: string;
     procedure Random;
     procedure Clear;
     procedure Load;
@@ -41,6 +47,11 @@ uses System.SysUtils, System.Math;
 procedure TTrueOrFalse.Add(const S: string);
 begin
   FSL.Append(S);
+end;
+
+function TTrueOrFalse.BaseFileName: string;
+begin
+  Result := GetPath + 'trueorfalse.txt';
 end;
 
 procedure TTrueOrFalse.Clear;
@@ -104,13 +115,13 @@ end;
 
 function TTrueOrFalse.GetFalse: string;
 const
-  S: array [0 .. 19] of string = ('Вы ошиблись.', 'И все-таки это правда.',
-    'Неправда.', 'Неправильно.', 'Вы подзабыли.', 'В этот раз не повезло.',
-    'Вы не угадали!', 'Неверно!', 'Вы перепутали.', 'Ошибка!',
-    'Какая досадная ошибка!', 'Нет, что вы!', 'Разумеется, нет.',
-    'Конечно, нет!', 'Нет.', 'На самом деле это неправда!',
-    'Увы, ваш ответ неверен.', 'Ой, ошибка.', 'Не угадали!',
-    'Увы, ответ неправильный.');
+  S: array [0 .. 19] of string = ('Р’С‹ РѕС€РёР±Р»РёСЃСЊ.', 'Р РІСЃРµ-С‚Р°РєРё СЌС‚Рѕ РїСЂР°РІРґР°.',
+    'РќРµРїСЂР°РІРґР°.', 'РќРµРїСЂР°РІРёР»СЊРЅРѕ.', 'Р’С‹ РїРѕРґР·Р°Р±С‹Р»Рё.', 'Р’ СЌС‚РѕС‚ СЂР°Р· РЅРµ РїРѕРІРµР·Р»Рѕ.',
+    'Р’С‹ РЅРµ СѓРіР°РґР°Р»Рё!', 'РќРµРІРµСЂРЅРѕ!', 'Р’С‹ РїРµСЂРµРїСѓС‚Р°Р»Рё.', 'РћС€РёР±РєР°!',
+    'РљР°РєР°СЏ РґРѕСЃР°РґРЅР°СЏ РѕС€РёР±РєР°!', 'РќРµС‚, С‡С‚Рѕ РІС‹!', 'Р Р°Р·СѓРјРµРµС‚СЃСЏ, РЅРµС‚.',
+    'РљРѕРЅРµС‡РЅРѕ, РЅРµС‚!', 'РќРµС‚.', 'РќР° СЃР°РјРѕРј РґРµР»Рµ СЌС‚Рѕ РЅРµРїСЂР°РІРґР°!',
+    'РЈРІС‹, РІР°С€ РѕС‚РІРµС‚ РЅРµРІРµСЂРµРЅ.', 'РћР№, РѕС€РёР±РєР°.', 'РќРµ СѓРіР°РґР°Р»Рё!',
+    'РЈРІС‹, РѕС‚РІРµС‚ РЅРµРїСЂР°РІРёР»СЊРЅС‹Р№.');
 begin
   Result := S[RandomRange(0, Length(S))];
 end;
@@ -125,12 +136,12 @@ end;
 
 function TTrueOrFalse.GetTrue: string;
 const
-  S: array [0 .. 19] of string = ('Верно!', 'Да!', 'Да, это так!', 'Все верно!',
-    'Это так!', 'Именно так!', 'Это правда!', 'Невероятно, но это так.',
-    'Правильно!', 'Конечно!', 'Действительно!', 'Абсолютно верно!',
-    'Это, и правда, так!', 'Это, действительно, так!', 'Вы ответили правильно.',
-    'Правда!', 'Вы абсолютно правы!', 'Вы совершенно правы!', 'Вы угадали!',
-    'Вы правы.');
+  S: array [0 .. 19] of string = ('Р’РµСЂРЅРѕ!', 'Р”Р°!', 'Р”Р°, СЌС‚Рѕ С‚Р°Рє!', 'Р’СЃРµ РІРµСЂРЅРѕ!',
+    'Р­С‚Рѕ С‚Р°Рє!', 'РРјРµРЅРЅРѕ С‚Р°Рє!', 'Р­С‚Рѕ РїСЂР°РІРґР°!', 'РќРµРІРµСЂРѕСЏС‚РЅРѕ, РЅРѕ СЌС‚Рѕ С‚Р°Рє.',
+    'РџСЂР°РІРёР»СЊРЅРѕ!', 'РљРѕРЅРµС‡РЅРѕ!', 'Р”РµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ!', 'РђР±СЃРѕР»СЋС‚РЅРѕ РІРµСЂРЅРѕ!',
+    'Р­С‚Рѕ, Рё РїСЂР°РІРґР°, С‚Р°Рє!', 'Р­С‚Рѕ, РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ, С‚Р°Рє!', 'Р’С‹ РѕС‚РІРµС‚РёР»Рё РїСЂР°РІРёР»СЊРЅРѕ.',
+    'РџСЂР°РІРґР°!', 'Р’С‹ Р°Р±СЃРѕР»СЋС‚РЅРѕ РїСЂР°РІС‹!', 'Р’С‹ СЃРѕРІРµСЂС€РµРЅРЅРѕ РїСЂР°РІС‹!', 'Р’С‹ СѓРіР°РґР°Р»Рё!',
+    'Р’С‹ РїСЂР°РІС‹.');
 begin
   Result := S[RandomRange(0, Length(S))];
 end;
@@ -158,7 +169,7 @@ var
   F: string;
 begin
   Clear;
-  F := GetHomePath + PathDelim + 'trueorfalse.sav';
+  F := SaveFileName;
   SL := TStringList.Create;
   try
     if FileExists(F) then
@@ -201,7 +212,7 @@ var
   SL: TStringList;
   F: string;
 begin
-  F := GetHomePath + PathDelim + 'trueorfalse.sav';
+  F := SaveFileName;
   SL := TStringList.Create;
   try
     SL.Append(IntToStr(Index));
@@ -210,8 +221,18 @@ begin
   finally
     FreeAndNil(SL);
   end;
-  F := GetHomePath + PathDelim + 'trueorfalse.txt';
+  F := TempFileName;
   FSL.SaveToFile(F, TEncoding.UTF8);
+end;
+
+function TTrueOrFalse.SaveFileName: string;
+begin
+  Result := GetHomePath + PathDelim + 'trueorfalse.sav';
+end;
+
+function TTrueOrFalse.TempFileName: string;
+begin
+  Result := GetHomePath + PathDelim + CurrVersionFilePref + 'trueorfalse.txt';
 end;
 
 end.
