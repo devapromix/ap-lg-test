@@ -36,11 +36,12 @@ type
     procedure Clear;
     procedure Load;
     procedure Save;
+    procedure New;
   end;
 
 implementation
 
-uses System.SysUtils, System.Math;
+uses System.SysUtils, System.Math, uCommon;
 
 { TTrueOrFalse }
 
@@ -190,6 +191,13 @@ begin
   FSL.LoadFromFile(FileName, TEncoding.UTF8);
 end;
 
+procedure TTrueOrFalse.New;
+begin
+  Clear;
+  LoadFromFile(BaseFileName);
+  Random;
+end;
+
 procedure TTrueOrFalse.Random;
 var
   I, A, B: Integer;
@@ -227,7 +235,7 @@ end;
 
 function TTrueOrFalse.SaveFileName: string;
 begin
-  Result := GetHomePath + PathDelim + 'trueorfalse.sav';
+  Result := GetHomePath + PathDelim + CurrVersionFilePref + 'trueorfalse.sav';
 end;
 
 function TTrueOrFalse.TempFileName: string;
