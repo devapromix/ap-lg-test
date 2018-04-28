@@ -43,6 +43,9 @@ implementation
 
 uses System.SysUtils, System.Math, uCommon;
 
+const
+  FName = 'trueorfalse';
+
 { TTrueOrFalse }
 
 procedure TTrueOrFalse.Add(const S: string);
@@ -52,7 +55,7 @@ end;
 
 function TTrueOrFalse.BaseFileName: string;
 begin
-  Result := GetPath + 'trueorfalse.txt';
+  Result := GetPath + FName + '.txt';
 end;
 
 procedure TTrueOrFalse.Clear;
@@ -235,12 +238,12 @@ end;
 
 function TTrueOrFalse.SaveFileName: string;
 begin
-  Result := GetHomePath + PathDelim + CurrVersionFilePref + 'trueorfalse.sav';
+  Result := GetHomePath + PathDelim + CurrVersionFilePref + FName + '.sav';
 end;
 
 function TTrueOrFalse.TempFileName: string;
 begin
-  Result := GetHomePath + PathDelim + CurrVersionFilePref + 'trueorfalse.txt';
+  Result := GetHomePath + PathDelim + CurrVersionFilePref + FName + '.txt';
 end;
 
 end.
