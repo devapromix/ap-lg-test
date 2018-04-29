@@ -1,0 +1,10 @@
+procedure TForm1.FormKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char;
+  Shift: TShiftState);
+begin
+...
+      // Обработка аппаратной клавиши "Back"
+      if Key = vkHardwareBack then
+      begin
+        //ваш обработчик поведения
+        ....
+        Key := 0; // отмена стандартного действия
