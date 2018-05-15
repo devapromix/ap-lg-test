@@ -1,3 +1,42 @@
+module('util', package.seeall)
+
+dirs = {
+   {-1,-1}, {0,-1}, {1,-1},
+
+   {1, 0}, {1, 1}, {0, 1},
+   {-1, 1}, {-1, 0},
+
+   -- indexes
+   nw = 1, n = 2, ne = 3,
+   e = 4, se = 5, s = 6,
+   sw = 7, w = 8,
+
+   add = function(dir, a)
+            return 1 + (dir+a-1)%8
+         end
+}
+
+function randomDir()
+   return unpack(dice.choice(dirs))
+end
+
+function dirTowards(x1, y1, x2, y2)
+   local dx, dy = x2-x1, y2-y1
+   if dx == 0 or dy == 0 then
+      return sign(dx), sign(dy)
+   else
+      local slope1 = math.abs(dx/dy)
+      local slope2 = 1/slope1
+      if slope1 < 0.5 then
+         return 0, sign(dy)
+      elseif slope2 < 0.5 then
+         return sign(dx), 0
+      else
+         return sign(dx), sign(dy)
+      end
+   end
+end
+
 function sign(x)
    if x > 0 then
       return 1
@@ -17,7 +56,7 @@ function signedDescr(n)
 end
 
 function descr_a(s)
-   local c = s:sub(1, 1)
+   local c = s:sub(1,1)
    if c:match('%u') then
       return s
    elseif c:match('[aeiou]') then
@@ -25,6 +64,13 @@ function descr_a(s)
    else
       return 'a ' .. s
    end
+end
+
+function descr_the(s)
+   --c = s:sub(1,1)
+   --if c:match('%u') then
+   -- return s
+   return 'the ' .. s
 end
 
 function delete(t, e)
@@ -38,7 +84,7 @@ function delete(t, e)
 end
 
 function capitalize(s)
-   return s:sub(1, 1):upper() .. s:sub(2)
+   return s:sub(1,1):upper() .. s:sub(2)
 end
 
 function split(s, pat)
@@ -47,12 +93,46 @@ function split(s, pat)
    while true do
       a, b = s:find(pat, i)
       if a then
-         table.insert(result, s:sub(i, a - 1))
-         i = b + 1
+         table.insert(result, s:sub(i, a-1))
+         i = b+1
       else
          table.insert(result, s:sub(i))
          break
       end
    end
    return result
+end
+
+function map(f, t)
+   result = {}
+   for _, v in ipairs(t) do
+      table.insert(t, f(v))
+   end
+   return result
+end
+
+function flatten(ts)
+   result = {}
+   for _, t in ipairs(ts) do
+      for _, v in ipairs(t) do
+         table.insert(result, v)
+      end
+   end
+   return result
+end
+
+function addRegister(cls)
+   cls.all = {}
+   local subclass = cls.subclass
+   function cls:subclass(o)
+      local exclude = o.exclude
+      o.exclude = nil
+      o = subclass(self, o)
+      if exclude then
+         o.exclude = true
+      else
+         table.insert(cls.all, o)
+      end
+      return o
+   end
 end
