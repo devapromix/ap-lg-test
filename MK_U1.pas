@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, jpeg, ExtCtrls, Grids, DBGrids, Db, DBTables, DBCtrls, Buttons;
+  StdCtrls, JPEG, ExtCtrls, Grids, DBGrids, Db, DBTables, DBCtrls, Buttons;
 
 {TODO: Добавить возможность редактировать кол-во веток просто выбрав строку и изменив число веток (автоматом тогда нужно или добавить в бд записи или удалить лишние)}
 {TODO: Если ввести в поле команду, она должна зап. в базу и поля редакт.}
