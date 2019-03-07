@@ -27,6 +27,7 @@ type
     FIsU1: TUState;
     FLog: TStringList;
     FNMax: Byte;
+    FStep: Byte;
   public
     constructor Create;
     destructor Destroy; override;
@@ -39,6 +40,7 @@ type
     procedure SetNN(const I: Integer; const Code: string);
     function GetNN(const I: Integer): string;
     property N: Byte read FN write FN;
+    property Step: Byte read FStep write FStep;
     property NMax: Byte read FNMax write FNMax;
     property P1: string read FP1 write FP1;
     property P2: string read FP2 write FP2;
@@ -68,6 +70,7 @@ var
 begin
   N := 1;
   NMax := 1;
+  Step := 1;
   FIsU1 := usNone;
   FIsU2 := usNone;
   for I := 1 to 255 do
